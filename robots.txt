@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://belosnezhka-cafe.ru/sitemap.xml
+Host: https://belosnezhka-cafe.ru

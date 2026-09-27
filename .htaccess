@@ -1,0 +1,77 @@
+# ==============================================================================
+# Белоснежка — Кафе и банкетный зал (ООО «ЭМИ»)
+# Конфигурация веб-сервера Apache / Nginx proxy (RU-CENTER Hosting)
+# ==============================================================================
+
+# Кодировка по умолчанию UTF-8
+AddDefaultCharset UTF-8
+
+# MIME-типы современных веб-ресурсов
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType image/avif .avif
+  AddType font/woff2 .woff2
+  AddType font/woff .woff
+  AddType font/ttf .ttf
+  AddType video/mp4 .mp4
+  AddType video/webm .webm
+  AddType application/javascript .js .mjs
+  AddType text/css .css
+</IfModule>
+
+# Модуль перенаправлений (mod_rewrite)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1. Принудительный редирект на защищенный протокол HTTPS
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # 2. Защита служебных и конфигурационных файлов от публичного скачивания
+  RewriteRule ^\.(?!well-known/) - [F,L]
+  RewriteRule \.(bak|rar|zip|tar|gz|log|py|sql|md)$ - [F,L]
+  RewriteRule ^server\.(js|py)$ - [F,L]
+
+  # 3. Прямая отдача существующих файлов и каталогов (HTML, CSS, JS, изображения, send.php)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 4. SPA Fallback: перенаправление остальных запросов на index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Сжатие контента (Gzip / mod_deflate) для максимальной скорости загрузки
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+  AddOutputFilterByType DEFLATE application/xml application/xhtml+xml application/rss+xml
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE font/ttf font/otf font/woff font/woff2
+</IfModule>
+
+# Кеширование статических ресурсов браузером (mod_expires / mod_headers)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/avif "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType video/mp4 "access plus 1 year"
+</IfModule>
+
+# Заголовки безопасности
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Пользовательское соглашение и публичная оферта — Кафе «Белоснежка» (ООО «ЭМИ»)</title>
+  <link rel="icon" type="image/png" href="./assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" />
+  <style>
+    :root {
+      --font-display: "Playfair Display", Georgia, serif;
+      --font-body: "Lora", Georgia, serif;
+      --color-bg: #1a1208;
+      --color-surface: #231808;
+      --color-gold: #c8853a;
+      --color-gold-light: #e4a55a;
+      --color-text: #f5ead8;
+      --color-muted: #d9c9b0;
+      --color-border: rgba(200, 133, 58, 0.25);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      padding: 40px 20px 80px;
+    }
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--color-gold);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 28px;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .nav-back:hover {
+      color: var(--color-gold-light);
+      transform: translateX(-3px);
+    }
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      padding: 48px 40px;
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.45);
+    }
+    @media (max-width: 640px) {
+      body { padding: 24px 14px 60px; }
+      .card { padding: 28px 20px; border-radius: 16px; }
+    }
+    .header-badge {
+      display: inline-block;
+      color: var(--color-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 4vw, 36px);
+      font-style: italic;
+      color: var(--color-gold);
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--color-muted);
+      font-size: 15px;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    h2 {
+      font-family: var(--font-display);
+      font-size: 21px;
+      color: var(--color-gold-light);
+      margin: 34px 0 14px;
+    }
+    p {
+      color: var(--color-muted);
+      margin-bottom: 14px;
+    }
+    ul, ol {
+      margin-bottom: 18px;
+      padding-left: 0;
+      list-style-type: none;
+    }
+    li {
+      color: var(--color-muted);
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 10px;
+    }
+    ul li::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: var(--color-gold);
+      font-size: 11px;
+      top: 3px;
+    }
+    ol {
+      counter-reset: item;
+    }
+    ol li {
+      counter-increment: item;
+    }
+    ol li::before {
+      content: counter(item) ".";
+      position: absolute;
+      left: 0;
+      color: var(--color-gold);
+      font-weight: bold;
+      font-size: 14px;
+      top: 0;
+    }
+    strong {
+      color: var(--color-text);
+    }
+    .requisites-box {
+      background: rgba(200, 133, 58, 0.08);
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+      padding: 24px 26px;
+      margin: 24px 0;
+      font-size: 15px;
+    }
+    .requisites-box p { margin-bottom: 8px; }
+    .requisites-box p:last-child { margin-bottom: 0; }
+    a { color: var(--color-gold); text-decoration: underline; text-underline-offset: 3px; }
+    a:hover { color: var(--color-gold-light); }
+    .doc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--color-border);
+      font-size: 14px;
+    }
+    .doc-nav a {
+      color: var(--color-gold);
+      text-decoration: none;
+      background: rgba(200, 133, 58, 0.1);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid var(--color-border);
+      transition: background 0.2s, color 0.2s;
+    }
+    .doc-nav a:hover {
+      background: rgba(200, 133, 58, 0.2);
+      color: var(--color-gold-light);
+    }
+    .footer-note {
+      text-align: center;
+      margin-top: 40px;
+      color: rgba(217, 201, 176, 0.5);
+      font-size: 14px;
+    }
+    @media print {
+      body { background: #fff; color: #000; }
+      .card { background: #fff; border: none; box-shadow: none; padding: 0; }
+      .nav-back, .doc-nav { display: none; }
+      h1, h2, strong { color: #000; }
+      .requisites-box { border: 1px solid #ccc; background: #fafafa; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="nav-back">← Вернуться на главную страницу</a>
+    <div class="card">
+      <span class="header-badge">Условия обслуживания · Публичная оферта</span>
+      <h1>Пользовательское соглашение и публичная оферта</h1>
+      <p class="subtitle">Правила обслуживания и предварительного бронирования в кафе «Белоснежка» (ООО «ЭМИ»)</p>
+
+      <h2>1. Общие положения и акцепт оферты</h2>
+      <p>Настоящий документ является публичной офертой Общества с ограниченной ответственностью «ЭМИ» (далее — «Исполнитель» или «Кафе») в соответствии со статьей 437 Гражданского кодекса Российской Федерации и определяет условия использования веб-сайта, а также порядок предварительного бронирования столиков, банкетных залов и оказания услуг общественного питания.</p>
+      <p>Использование Сайта, отправка заявки через электронные формы бронирования или совершение визита в кафе означает полное и безоговорочное согласие Потребителя (Заказчика) со всеми условиями настоящего Соглашения (акцепт оферты).</p>
+
+      <h2>2. Сведения об исполнителе</h2>
+      <div class="requisites-box">
+        <p><strong>Организация:</strong> Общество с ограниченной ответственностью «ЭМИ» (ООО «ЭМИ»)</p>
+        <p><strong>ОГРН:</strong> 1060265016349 · <strong>ИНН:</strong> 0265028241 · <strong>КПП:</strong> 026501001</p>
+        <p><strong>Юридический адрес:</strong> 452616, Российская Федерация, Республика Башкортостан, г. Октябрьский, Проспект Ленина, д. 57, Помещение 1</p>
+        <p><strong>Фактический адрес:</strong> 452616, Российская Федерация, Республика Башкортостан, г. Октябрьский, Проспект Ленина, д. 57 (Кафе «Белоснежка»)</p>
+        <p><strong>Контактный e-mail:</strong> <a href="mailto:imiliz@mail.ru">imiliz@mail.ru</a></p>
+        <p><strong>Телефоны:</strong> <a href="tel:+73476735505">+7 (34767) 3-55-05</a>, <a href="tel:+79378435505">+7 (937) 843-55-05</a></p>
+      </div>
+
+      <h2>3. Порядок предварительного бронирования</h2>
+      <ol>
+        <li><strong>Бронирование столика:</strong> Заказчик вправе оформить предварительную заявку на резерв столика через электронную форму на Сайте или по телефону. Заявка считается подтвержденной только после звонка администратора кафе по указанному Заказчиком номеру телефона.</li>
+        <li><strong>Бронирование банкетного зала:</strong> Бронирование Большого зала (до 150 персон) и Малого зала (до 25 персон) для свадеб, юбилеев и корпоративных мероприятий сопровождается согласованием банкетного меню и оформлением бланка заказа в соответствии с Правилами оказания услуг общественного питания.</li>
+        <li><strong>Условия бронирования:</strong> В пятницу, субботу и праздничные дни в кафе может действовать программа живой музыки (входной сбор 250 ₽/персона согласно афише заведения). Время ожидания забронированного столика при опоздании гостя без предварительного уведомления составляет 15 минут.</li>
+      </ol>
+
+      <h2>4. Права и обязанности сторон</h2>
+      <p><strong>Исполнитель обязуется:</strong></p>
+      <ul>
+        <li>Оказывать услуги общественного питания качественно, безопасно и в строгом соответствии с санитарно-эпидемиологическими правилами (СанПиН) и законодательством РФ;</li>
+        <li>Предоставлять достоверную информацию о составе, калорийности и свойствах блюд, указанных в меню;</li>
+        <li>Обеспечивать конфиденциальность полученных персональных данных в соответствии с 152-ФЗ.</li>
+      </ul>
+      <p><strong>Потребитель обязуется:</strong></p>
+      <ul>
+        <li>Предоставлять корректные контактные данные при отправке заявок;</li>
+        <li>Соблюдать общественный порядок и правила поведения в помещении заведения;</li>
+        <li>Своевременно информировать администратора кафе в случае отмены или изменения параметров бронирования.</li>
+      </ul>
+
+      <h2>5. Цены, оплата и отказ от услуг</h2>
+      <p>Цены на продукцию общественного питания и услуги указаны в меню кафе в рублях Российской Федерации. Расчеты производятся наличными денежными средствами или с использованием банковских карт на кассе заведения.</p>
+      <p>В соответствии со статьей 32 Закона РФ «О защите прав потребителей», потребитель вправе отказаться от исполнения договора об оказании услуг в любое время при условии оплаты исполнителю фактически понесенных им расходов.</p>
+
+      <h2>6. Разрешение споров и претензионный порядок</h2>
+      <p>Все споры и разногласия разрешаются сторонами путем переговоров. Претензии и замечания по качеству обслуживания могут быть направлены через форму «Оставить жалобу» на Сайте, по электронной почте <a href="mailto:imiliz@mail.ru">imiliz@mail.ru</a> или в письменном виде по адресу кафе. Срок рассмотрения претензий потребителей составляет не более 10 дней со дня предъявления соответствующего требования.</p>
+
+      <div class="doc-nav">
+        <a href="/privacy.html">Политика конфиденциальности (152-ФЗ) →</a>
+        <a href="/consent.html">Согласие на обработку персональных данных →</a>
+      </div>
+    </div>
+    <p class="footer-note">© 2026 Кафе «Белоснежка» · ООО «ЭМИ» · г. Октябрьский</p>
+  </div>
+</body>
+</html>

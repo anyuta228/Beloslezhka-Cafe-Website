@@ -1,16 +1,53 @@
 <!doctype html>
-<html lang="<!-- figma:lang -->">
+<html lang="ru">
   <head>
-    <!-- figma:head-start -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><!-- figma:title --></title>
-    <!-- figma:head-end -->
+    <title>Кафе Белоснежка</title>
+
+    <!-- Google Fonts: Lora, PT Serif, Playfair Display (с кириллицей и display=swap) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" />
+
+    <!-- Preload LCP-изображения первого экрана для максимальной скорости рендеринга -->
+    <link rel="preload" as="image" href="./images/hero/hero-mobile.webp" type="image/webp" media="(max-width: 768px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="./images/hero/hero-desktop.webp" type="image/webp" media="(min-width: 769px)" fetchpriority="high" />
+
+    <!-- Фавиконка -->
+    <link rel="icon" type="image/png" href="./assets/favicon.png" />
+    <link rel="apple-touch-icon" href="./assets/favicon.png" />
+
+    <!-- Основные метатеги SEO -->
+    <meta name="description" content="Кафе «Белоснежка» в г. Октябрьский — разнообразная авторская и домашняя кухня, сочный шашлык в мангале, банкетные залы до 150 персон, живая музыка и бизнес-ланчи." />
+    <meta name="keywords" content="кафе Белоснежка, кафе Октябрьский, банкетный зал Октябрьский, шашлык Октябрьский, заказать банкет Октябрьский, ресторан Белоснежка" />
+    <meta name="author" content="Кафе Белоснежка" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://belosnezhka-cafe.ru/" />
+
+    <!-- Геопривязка для локального поиска (Яндекс и Google) -->
+    <meta name="geo.region" content="RU-BA" />
+    <meta name="geo.placename" content="Октябрьский" />
+    <meta name="geo.position" content="54.4815;53.4710" />
+    <meta name="ICBM" content="54.4815, 53.4710" />
+
+    <!-- Open Graph (красивое превью в VK, Telegram, WhatsApp) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content="Кафе «Белоснежка»" />
+    <meta property="og:title" content="Кафе Белоснежка" />
+    <meta property="og:description" content="Разнообразная кухня, шашлык в мангале, проведение банкетов до 150 гостей и живая музыка в г. Октябрьский." />
+    <meta property="og:url" content="https://belosnezhka-cafe.ru/" />
+    <meta property="og:image" content="./assets/favicon.png" />
+    <script type="module" crossorigin src="./assets/js/index-CiIGU5wq.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/js/rolldown-runtime-hePW80VL.js">
+    <link rel="modulepreload" crossorigin href="./assets/js/vendor-C784v2VA.js">
+    <link rel="modulepreload" crossorigin href="./assets/js/vendor-react-DgtyOC7i.js">
+    <link rel="modulepreload" crossorigin href="./assets/js/vendor-plyr-Cug0W0_O.js">
+    <link rel="stylesheet" crossorigin href="./assets/css/vendor-plyr-BV0mtPOj.css">
+    <link rel="stylesheet" crossorigin href="./assets/css/index-CXaKmdBy.css">
   </head>
   <body>
-    <!-- figma:body-start -->
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-    <!-- figma:body-end -->
   </body>
 </html>
