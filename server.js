@@ -6,6 +6,27 @@ const url = require('url');
 const DEFAULT_PORT = 3000;
 const ROOT_DIR = __dirname;
 
+// Безопасная загрузка переменных окружения из .env
+try {
+  const envPath = path.join(ROOT_DIR, '.env');
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf-8');
+    envContent.split('\n').forEach(line => {
+      line = line.trim();
+      if (!line || line.startsWith('#')) return;
+      const idx = line.indexOf('=');
+      if (idx !== -1) {
+        const k = line.slice(0, idx).trim();
+        let v = line.slice(idx + 1).trim();
+        if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+          v = v.slice(1, -1);
+        }
+        if (!process.env[k]) process.env[k] = v;
+      }
+    });
+  }
+} catch (e) {}
+
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'application/javascript; charset=utf-8',
@@ -26,9 +47,23 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const origin = req.headers['origin'];
+  const allowedOrigins = [
+    'https://belka-cafe.ru',
+    'http://belka-cafe.ru',
+    'https://www.belka-cafe.ru',
+    'http://www.belka-cafe.ru',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+  ];
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  } else if (!origin) {
+    // Same-origin browser request
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Range');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Range, Authorization');
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
 
   if (req.method === 'OPTIONS') {
@@ -37,8 +72,47 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  const parsedUrl = url.parse(req.url);
+  const parsedUrl = url.parse(req.url, true);
   let pathname = decodeURIComponent(parsedUrl.pathname);
+
+  // Rewrite /admin/ subpath asset requests to root assets/
+  if (pathname.startsWith('/admin/assets/')) {
+    pathname = pathname.replace('/admin/assets/', '/assets/');
+  } else if (pathname.startsWith('/admin/images/')) {
+    pathname = pathname.replace('/admin/images/', '/images/');
+  } else if (pathname.startsWith('/admin/uploads/')) {
+    pathname = pathname.replace('/admin/uploads/', '/uploads/');
+  }
+
+  // Route /api/* requests to dev API handler
+  if (pathname.startsWith('/api/')) {
+    try {
+      const { handleApiRequest } = require('./api_dev_server.js');
+      handleApiRequest(req, res, pathname, parsedUrl.query);
+      return;
+    } catch (apiErr) {
+      console.error('API Error:', apiErr);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: apiErr.message }));
+      return;
+    }
+  }
+
+  // Handle save_webp for quick WebP conversions from Puppeteer
+  if (req.method === 'POST' && pathname === '/save_webp') {
+    let body = '';
+    const filename = req.headers['x-filename'] || 'temp.webp';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      const buf = Buffer.from(body, 'base64');
+      fs.writeFileSync(path.join(ROOT_DIR, 'assets/webp/' + filename), buf);
+      fs.writeFileSync(path.join(ROOT_DIR, 'dist_production/assets/webp/' + filename), buf);
+      console.log(`Saved webp ${filename}! Size: ${buf.length}`);
+      res.writeHead(200);
+      res.end('OK');
+    });
+    return;
+  }
 
   // Handle send.php with real VK message delivery
   if (req.method === 'POST' && pathname === '/send.php') {
@@ -47,8 +121,8 @@ const server = http.createServer((req, res) => {
     req.on('end', () => {
       try {
         const input = JSON.parse(body || '{}');
-        const vkToken = 'vk1.a.QHdnDIOLf_OdAuHKoji22YKwZNiky-y0tQgicbBbyfcDBj8--xfCBlFHyc4voxSIOG1JWEQRhfgy2-Pqoi-l-B4GIDU7lyOJi51ZSgoQiKEDjQca9bFGk38BXdvLnWHt0YwANAbdefGjiHtBDdpxvZTmo19F0QYiIBwZY5_Izhr6Ntvk59abN-rGvlSe2isUxDD9nQ2JXPWavZFs96jK9g';
-        const vkUserId = '710846762';
+        const vkToken = process.env.VK_ACCESS_TOKEN || '';
+        const vkUserId = process.env.VK_USER_ID || '710846762';
 
         const name = input.name || '';
         const phone = input.phone || input.contact || '';
@@ -62,14 +136,44 @@ const server = http.createServer((req, res) => {
         if (type === 'complaint' || input.isComplaint || (comment && comment.includes('[ЖАЛОБА]'))) {
           let cleanComment = comment.replace(/^\[ЖАЛОБА\]\s*(Оставить жалобу)?\s*(Ваше имя:[^\n]+\n)?\s*(Телефон или e-mail для связи:[^\n]+\n)?\s*(Суть жалобы или замечания:)?/u, '').trim();
           if (!cleanComment && input.text) cleanComment = input.text.trim();
-          message = `⚠️ [ЖАЛОБА - ТЕСТ] Оставить жалобу\n\n👤 Ваше имя: ${name}\n📞 Телефон или e-mail: ${phone}\n💬 Суть жалобы: ${cleanComment || comment}`;
+          message = `⚠️ [ЖАЛОБА] Оставить жалобу\n\n👤 Ваше имя: ${name}\n📞 Телефон или e-mail: ${phone}\n💬 Суть жалобы: ${cleanComment || comment}`;
         } else if (type === 'review' || input.isReview || (comment && comment.includes('[ОТЗЫВ]'))) {
           const rating = input.rating || '5';
           const stars = '⭐'.repeat(Math.max(1, Math.min(5, parseInt(rating, 10))));
           let cleanComment = comment.replace(/^\[ОТЗЫВ\]\s*(Оценка:[^\n]+\n)?/u, '').trim();
-          message = `⭐ [ОТЗЫВ - ТЕСТ] Новый отзыв!\n\n👤 Имя: ${name}\n📞 Контакт: ${phone}\n✨ Оценка: ${rating} из 5 ${stars}\n💬 Отзыв: ${cleanComment || comment}`;
+          message = `⭐ [ОТЗЫВ] Новый отзыв от гостя!\n\n👤 Имя: ${name}\n📞 Контакт: ${phone}\n✨ Оценка: ${rating} из 5 ${stars}\n💬 Отзыв: ${cleanComment || comment}`;
         } else {
-          message = `🍽 [БРОНИРОВАНИЕ - ТЕСТ] Новая заявка на бронь!\n\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📅 Дата: ${date}\n⏰ Время: ${time}\n👥 Гостей: ${guests}\n💬 Комментарий: ${comment}`;
+          message = `🍽 [БРОНИРОВАНИЕ] Новая заявка на бронь!\n\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📅 Дата: ${date}\n⏰ Время: ${time}\n👥 Гостей: ${guests}\n💬 Комментарий: ${comment}`;
+        }
+
+        // Also save to local database for the admin panel live monitor!
+        try {
+          const dbPath = path.join(ROOT_DIR, 'scratch/db_local.json');
+          if (fs.existsSync(dbPath)) {
+            const db = JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
+            if (!db.bookings) db.bookings = [];
+            const newId = db.bookings.reduce((max, b) => Math.max(max, Number(b.id) || 0), 0) + 1;
+            const newBooking = {
+              id: newId,
+              type: (type === 'complaint' || input.isComplaint) ? 'complaint' : ((type === 'review' || input.isReview) ? 'review' : 'table'),
+              name,
+              phone,
+              booking_date: date !== 'Не указана' ? date : '',
+              booking_time: time !== 'Не указано' ? time : '',
+              guests: guests !== 'Не указано' ? guests : '',
+              hall: input.hall || 'Основной зал',
+              comment,
+              rating: input.rating ? Number(input.rating) : null,
+              status: 'new',
+              source: 'website',
+              created_at: new Date().toISOString().replace('T', ' ').slice(0, 19)
+            };
+            db.bookings.unshift(newBooking);
+            fs.writeFileSync(dbPath, JSON.stringify(db, null, 2), 'utf-8');
+            console.log(`[send.php] Saved booking #${newId} to local DB for admin live monitor!`);
+          }
+        } catch (dbErr) {
+          console.error('[send.php] Local DB save error:', dbErr);
         }
 
         console.log('[send.php] Sending VK notification:\n', message);
@@ -122,6 +226,14 @@ const server = http.createServer((req, res) => {
   }
 
   fs.stat(filePath, (err, stats) => {
+    if (!err && stats.isDirectory()) {
+      const dirIndex = path.join(filePath, 'index.html');
+      if (fs.existsSync(dirIndex)) {
+        serveFile(req, res, dirIndex);
+        return;
+      }
+    }
+
     if (err || !stats.isFile()) {
       // SPA Fallback for client-side routing
       if (!path.extname(pathname)) {

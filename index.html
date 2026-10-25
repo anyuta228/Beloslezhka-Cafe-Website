@@ -3,12 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NQQ5N8SM');</script>
+    <!-- End Google Tag Manager -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8TYD3D15DD"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-8TYD3D15DD');
+    </script>
+
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=113705981', 'ym');
+
+        ym(113705981, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/113705981" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+    <script src="./assets/js/analytics-tracker.js?v=14.0"></script>
+
     <title>Кафе Белоснежка</title>
 
     <!-- Google Fonts: Lora, PT Serif, Playfair Display (с кириллицей и display=swap) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" />
 
     <!-- Preload LCP-изображения первого экрана для максимальной скорости рендеринга -->
     <link rel="preload" as="image" href="./images/hero/hero-mobile.webp" type="image/webp" media="(max-width: 768px)" fetchpriority="high" />
@@ -38,16 +71,89 @@
     <meta property="og:title" content="Кафе Белоснежка" />
     <meta property="og:description" content="Разнообразная кухня, шашлык в мангале, проведение банкетов до 150 гостей и живая музыка в г. Октябрьский." />
     <meta property="og:url" content="https://belosnezhka-cafe.ru/" />
-    <meta property="og:image" content="./assets/favicon.png" />
-    <script type="module" crossorigin src="./assets/js/index-CiIGU5wq.js"></script>
+    <!-- Синхронизация динамических данных сайта (меню, фото, цены, акции, залы, галерея, настройки) из БД -->
+    <script>
+      (function() {
+        try {
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', '/api/site_data.php?t=' + Date.now(), false);
+          xhr.send(null);
+          if (xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            if (data && data.success) {
+              window.__SITE_DATA__ = data;
+              window.__SITE_SETTINGS__ = data.settings || {};
+              if (typeof window.__SITE_SETTINGS__.schedule === 'string') {
+                try {
+                  window.__SITE_SETTINGS__.schedule = JSON.parse(window.__SITE_SETTINGS__.schedule);
+                } catch(e) {}
+              }
+            }
+          }
+        } catch (e) {
+          // Graceful fallback to static defaults
+        }
+
+        if (!window.__SITE_SETTINGS__) {
+          try {
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open('GET', '/api/settings.php', false);
+            xhr2.send(null);
+            if (xhr2.status === 200) {
+              var d = JSON.parse(xhr2.responseText);
+              if (d && d.success && d.settings) {
+                window.__SITE_SETTINGS__ = d.settings;
+                if (typeof d.settings.schedule === 'string') {
+                  try {
+                    window.__SITE_SETTINGS__.schedule = JSON.parse(d.settings.schedule);
+                  } catch(e) {}
+                }
+              }
+            }
+          } catch(e) {}
+        }
+
+        function syncAboutImg() {
+          var photo = window.__SITE_SETTINGS__ && window.__SITE_SETTINGS__.about_photo;
+          if (photo) {
+            var card = document.querySelector('.about-photo-card');
+            if (card) {
+              var sources = card.querySelectorAll('source');
+              for (var i = 0; i < sources.length; i++) {
+                sources[i].remove();
+              }
+              var img = card.querySelector('img');
+              if (img && img.getAttribute('src') !== photo) {
+                img.src = photo;
+                if (img.srcset) img.srcset = '';
+              }
+            }
+          }
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', syncAboutImg);
+        } else {
+          syncAboutImg();
+        }
+        window.addEventListener('load', syncAboutImg);
+        setTimeout(syncAboutImg, 250);
+        setTimeout(syncAboutImg, 800);
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/js/index-CiIGU5wq.js?v=14.0"></script>
     <link rel="modulepreload" crossorigin href="./assets/js/rolldown-runtime-hePW80VL.js">
     <link rel="modulepreload" crossorigin href="./assets/js/vendor-C784v2VA.js">
     <link rel="modulepreload" crossorigin href="./assets/js/vendor-react-DgtyOC7i.js">
     <link rel="modulepreload" crossorigin href="./assets/js/vendor-plyr-Cug0W0_O.js">
     <link rel="stylesheet" crossorigin href="./assets/css/vendor-plyr-BV0mtPOj.css">
-    <link rel="stylesheet" crossorigin href="./assets/css/index-CXaKmdBy.css">
+    <link rel="stylesheet" crossorigin href="./assets/css/index-CXaKmdBy.css?v=14.0">
   </head>
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NQQ5N8SM"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <div id="root"></div>
   </body>
 </html>

@@ -1,20 +1,26 @@
-node_modules/
-dist/
-build/
-.cache/
-.env*
-.vite/
-vite.config.*.timestamp-*
-*.tsbuildinfo
-*-debug.log*
-logs/
-*.log
-.claude-replay.*
-.tmp-*
+# Секретные конфигурационные файлы и переменные окружения
+.env
+.env.local
+.env.*.local
 
-# Platform-managed agentplat state, not project source. In the
-# client-initiated single-repo workspace layout (make's `Path: "."` spec) the
-# repo root IS the workspace root, so these land inside this repo rather than
-# beside it.
-/.plugins/
-/.opencode-skills/
+# Базы данных и дампы
+*.sql
+*.sqlite
+scratch/
+db_local.json
+
+# Логи и временные файлы
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+belka_rate_limits/
+
+# Резервные копии
+*.bak
+_backup*/
+dist_production/
+
+# Системные файлы ОС
+.DS_Store
+Thumbs.db

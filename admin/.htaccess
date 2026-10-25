@@ -1,0 +1,15 @@
+# ==============================================================================
+# Защита панели управления администратора (/admin/)
+# ==============================================================================
+
+# Запрет кеширования административного интерфейса браузерами и прокси
+<IfModule mod_headers.c>
+    Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0, private"
+    Header always set Pragma "no-cache"
+    Header always set X-Frame-Options "DENY"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "same-origin"
+</IfModule>
+
+# Запрет листинга каталога
+Options -Indexes

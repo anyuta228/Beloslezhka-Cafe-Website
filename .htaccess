@@ -31,7 +31,7 @@ AddDefaultCharset UTF-8
 
   # 2. Защита служебных и конфигурационных файлов от публичного скачивания
   RewriteRule ^\.(?!well-known/) - [F,L]
-  RewriteRule \.(bak|rar|zip|tar|gz|log|py|sql|md)$ - [F,L]
+  RewriteRule \.(bak|rar|zip|tar|gz|log|py|sql|md|env)$ - [F,L]
   RewriteRule ^server\.(js|py)$ - [F,L]
 
   # 3. Прямая отдача существующих файлов и каталогов (HTML, CSS, JS, изображения, send.php)

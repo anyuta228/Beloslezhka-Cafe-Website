@@ -1,0 +1,26 @@
+# ==============================================================================
+# Защита директории загрузок от выполнения любых серверных скриптов
+# ==============================================================================
+
+# Отключение интерпретатора PHP
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>
+
+# Снятие ассоциации обработчиков сценариев
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .phps .cgi .pl .asp .aspx .shtml
+
+# Полный запрет доступа к скриптовым расширениям
+<FilesMatch "(?i)\.(php|phtml|php3|php4|php5|php7|php8|phps|cgi|pl|asp|aspx|shtml|sh|bash|exe|py|js)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Запрет листинга каталога
+Options -Indexes -ExecCGI
